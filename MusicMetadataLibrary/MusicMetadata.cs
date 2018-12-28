@@ -4,14 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-
 using TagLib;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Text.RegularExpressions;
 
 namespace MusicMetadataLibrary {
     public class MusicMetadata : INotifyPropertyChanged {
         private string path;
+
         public string FileName { get; }
 
         private string _Title { get; set; }
@@ -20,7 +23,7 @@ namespace MusicMetadataLibrary {
             set {
                 if (_Title != value) {
                     _Title = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("Title"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Title"));
                 }
             }
         }
@@ -31,7 +34,7 @@ namespace MusicMetadataLibrary {
             set {
                 if (_Artist != value) {
                     _Artist = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("Artist"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Artist"));
                 }
             }
         }
@@ -42,7 +45,7 @@ namespace MusicMetadataLibrary {
             set {
                 if (_Album != value) {
                     _Album = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("Album"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Album"));
                 }
             }
         }
@@ -53,7 +56,7 @@ namespace MusicMetadataLibrary {
             set {
                 if (_Year != value) {
                     _Year = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("Year"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Year"));
                 }
             }
         }
@@ -64,7 +67,7 @@ namespace MusicMetadataLibrary {
             set {
                 if (_Track != value) {
                     _Track = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("Track"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Track"));
                 }
             }
         }
@@ -75,7 +78,7 @@ namespace MusicMetadataLibrary {
             set {
                 if (_Genre != value) {
                     _Genre = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("Genre"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Genre"));
                 }
             }
         }
@@ -86,7 +89,7 @@ namespace MusicMetadataLibrary {
             set {
                 if (_Comment != value) {
                     _Comment = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("Comment"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Comment"));
                 }
             }
         }
@@ -97,7 +100,7 @@ namespace MusicMetadataLibrary {
             set {
                 if (_AlbumArtist != value) {
                     _AlbumArtist = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("AlbumArtist"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AlbumArtist"));
                 }
             }
         }
@@ -108,7 +111,7 @@ namespace MusicMetadataLibrary {
             set {
                 if (_Composer != value) {
                     _Composer = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("Composer"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Composer"));
                 }
             }
         }
@@ -119,12 +122,39 @@ namespace MusicMetadataLibrary {
             set {
                 if (_Discnumber != value) {
                     _Discnumber = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("Discnumber"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Discnumber"));
                 }
             }
         }
 
-        public byte[] AlbumArt { get; set; }
+        private byte[] _AlbumArt { get; set; }
+        public byte[] AlbumArt {
+            get { return _AlbumArt; }
+            set {
+                _AlbumArt = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AlbumArt"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AlbumArtSize"));
+            }
+        }
+
+        private BitmapImage _BitmapAlbumArt { get; set; }
+        public BitmapImage BitmapAlbumArt { get; set; }
+
+        public System.Windows.Media.Color AlbumArtDominantColor { get; set; }
+        public string AlbumArtSize {
+            get {
+                double size = AlbumArt.Length;
+                if (AlbumArt.Length >= 1024 * 1024) {
+                    size /= 1024 * 1024;
+                    return size.ToString("0.00") + "MB";
+                } else if (AlbumArt.Length >= 1024) {
+                    size /= 1024;
+                    return size.ToString("0.00") + "kB";
+                } else {
+                    return size.ToString() + "B";
+                }
+            }
+        }
 
         private TagLib.File file;
 
@@ -147,8 +177,106 @@ namespace MusicMetadataLibrary {
             _Discnumber = file.Tag.Disc;
 
             if (file.Tag.Pictures.Length > 0) {
-                AlbumArt = file.Tag.Pictures[0].Data.Data;
+                _AlbumArt = file.Tag.Pictures[0].Data.Data;
+                ConvertAlbumArt();
             }
+        }
+
+        private void ConvertAlbumArt() {
+            BitmapAlbumArt = new BitmapImage();
+            Bitmap bitmap;
+            using (MemoryStream stream = new MemoryStream(AlbumArt)) {
+                stream.Position = 0;
+                BitmapAlbumArt.BeginInit();
+                BitmapAlbumArt.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                BitmapAlbumArt.CacheOption = BitmapCacheOption.OnLoad;
+                BitmapAlbumArt.UriSource = null;
+                BitmapAlbumArt.StreamSource = stream;
+                BitmapAlbumArt.EndInit();
+                bitmap = (Bitmap)Image.FromStream(stream);
+            }
+            BitmapAlbumArt.Freeze();
+
+            AlbumArtDominantColor = CalculateAverageColor(bitmap);
+            bitmap.Dispose();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BitmapAlbumArt"));
+        }
+
+        public void CreateNewAlbumArt(string file, bool isBase64) {
+            if (isBase64) {
+                AlbumArt = Convert.FromBase64String(Regex.Replace(file, ".*,", string.Empty));
+                ConvertAlbumArt();
+            } else {
+                AlbumArt = System.IO.File.ReadAllBytes(file);
+                ConvertAlbumArt();
+            }
+        }
+
+        //Originated from https://stackoverflow.com/questions/6177499/how-to-determine-the-background-color-of-document-when-there-are-3-options-usin/6185448#6185448
+        private System.Windows.Media.Color CalculateAverageColor(Bitmap bm) {
+            int width = bm.Width;
+            int height = bm.Height;
+            int red;
+            int green;
+            int blue;
+            int white = 0;
+            int black = 0;
+            int minDiversion = 15; // drop pixels that do not differ by at least minDiversion between color values (white, gray or black)
+            int dropped = 0; // keep track of dropped pixels
+            long[] totals = new long[] { 0, 0, 0 };
+            int bppModifier = bm.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb ? 3 : 4; // cutting corners, will fail on anything else but 32 and 24 bit images
+
+            BitmapData srcData = bm.LockBits(new Rectangle(0, 0, bm.Width, bm.Height), ImageLockMode.ReadOnly, bm.PixelFormat);
+            int stride = srcData.Stride;
+            IntPtr Scan0 = srcData.Scan0;
+
+            unsafe {
+                byte* p = (byte*)(void*)Scan0;
+
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        int idx = (y * stride) + x * bppModifier;
+                        red = p[idx + 2];
+                        green = p[idx + 1];
+                        blue = p[idx];
+                        if (Math.Abs(red - green) > minDiversion || Math.Abs(red - blue) > minDiversion || Math.Abs(green - blue) > minDiversion) {
+                            totals[2] += red;
+                            totals[1] += green;
+                            totals[0] += blue;
+                        }
+                        else {
+                            if (red == 0) {
+                                black += 1;
+                            } else {
+                                white = 0;
+                            }
+                            dropped++;
+                        }
+                    }
+                }
+            }
+
+            int count = width * height - dropped;
+            byte avgR;
+            byte avgG;
+            byte avgB;
+            if (count > 0) {
+                avgR = (byte)(totals[2] / count);
+                avgG = (byte)(totals[1] / count);
+                avgB = (byte)(totals[0] / count);
+            } else {
+                if (black > white) {
+                    avgR = 0;
+                    avgG = 0;
+                    avgB = 0;
+                } else {
+                    avgR = 255;
+                    avgG = 255;
+                    avgB = 255;
+                }
+            }
+
+            return System.Windows.Media.Color.FromRgb(avgR, avgG, avgB);
         }
 
         public void Save() {

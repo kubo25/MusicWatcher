@@ -15,7 +15,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using MusicMetadataLibrary;
-using ColorThiefDotNet;
 using System.ComponentModel;
 
 namespace MusicWatcher {
@@ -23,19 +22,15 @@ namespace MusicWatcher {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : MetroWindow {
-        private static string testPath = @"D:\Hudba\A Perfect Circle\Eat the Elephant";
-
         public ViewModel Model { get; set; }
 
-        private ColorThief colorThief = new ColorThief();
-        
-        public MainWindow() {
+        public MainWindow(string path) {
             InitializeComponent();
 
-            Model = new ViewModel(testPath);
+            Model = new ViewModel(path);
             DataContext = Model;
 
-            ShowAlbumArt();
+            ColorizeWindow();
         }
 
         private void OnClose(object sender, CancelEventArgs e) {
@@ -44,44 +39,34 @@ namespace MusicWatcher {
             }
         }
 
-        private void ShowAlbumArt() {
-            if (Model.SelectedTrack.AlbumArt != null) { 
-                BitmapImage image = new BitmapImage();
-                System.Drawing.Bitmap bitmap;
-                using (MemoryStream stream = new MemoryStream(Model.SelectedTrack.AlbumArt)) {
-                    stream.Position = 0;
-                    image.BeginInit();
-                    image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                    image.CacheOption = BitmapCacheOption.OnLoad;
-                    image.UriSource = null;
-                    image.StreamSource = stream;
-                    image.EndInit();
-                    bitmap = (System.Drawing.Bitmap)System.Drawing.Image.FromStream(stream);
-                }
-                image.Freeze();
-                AlbumArt.Source = image;
-
-                QuantizedColor stolenColor = colorThief.GetColor(bitmap);
-                bitmap.Dispose();
-                System.Windows.Media.Color color = (System.Windows.Media.Color)ColorConverter.ConvertFromString(stolenColor.Color.ToHexString());
-                ThemeManagerHelper.CreateAppStyleBy(color, true);
-                Application.Current.MainWindow.Activate();
-            }
-        }
-
-        private byte[] ConvertImage() {
-            byte[] data;
-            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create((BitmapImage)AlbumArt.Source));
-            using (MemoryStream stream = new MemoryStream()) {
-                encoder.Save(stream);
-                data = stream.ToArray();
-            }
-            return data;
+        private void ColorizeWindow() {
+            ThemeManagerHelper.CreateAppStyleBy(Model.SelectedTrack.AlbumArtDominantColor, true);
+            Application.Current.MainWindow.Activate();
         }
 
         private void SaveCommand(object sender, ExecutedRoutedEventArgs e) {
             Model.SelectedTrack.Save();
+        }
+
+        private void SelectedTrackChanged(object sender, SelectionChangedEventArgs e) {
+            ColorizeWindow();
+        }
+
+        private void ImageDrop(object sender, DragEventArgs e) {
+            Model.SelectedTrack.PropertyChanged += ImageChanged;
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+                Model.SelectedTrack.CreateNewAlbumArt((e.Data.GetData(DataFormats.FileDrop) as string[])[0], false);
+            } else if (e.Data.GetDataPresent(DataFormats.Text)) {
+                Model.SelectedTrack.CreateNewAlbumArt((e.Data.GetData(DataFormats.Text) as string), true);
+            }
+        }
+
+        private void ImageChanged(object sender, PropertyChangedEventArgs e) {
+            if (e.PropertyName == "BitmapAlbumArt") {
+                ColorizeWindow();
+                Model.SelectedTrack.PropertyChanged -= ImageChanged;
+            }
         }
     }
 }

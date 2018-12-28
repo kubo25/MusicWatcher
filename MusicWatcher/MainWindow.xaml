@@ -120,18 +120,39 @@
             />
             <Grid Grid.Row="8">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="4*"/>
                     <RowDefinition Height="1*"/>
+                    <RowDefinition Height="4*"/>
                 </Grid.RowDefinitions>
-                <Viewbox 
+                <Label 
+                    Grid.Row="0" 
+                    Margin="7" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                >
+                    <Label.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}x{1} - {2}">
+                                    <Binding Path="SelectedTrack.BitmapAlbumArt.Width"/>
+                                    <Binding Path="SelectedTrack.BitmapAlbumArt.Height"/>
+                                    <Binding Path="SelectedTrack.AlbumArtSize"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Label.Content>
+                </Label>
+                <Viewbox
                     VerticalAlignment="Top" 
                     Stretch="Uniform" 
-                    Grid.Row="0" 
+                    Grid.Row="1" 
                     Margin="7"
                 >
-                    <Image Name="AlbumArt" />
+                    <Image 
+                        Source="{Binding SelectedTrack.BitmapAlbumArt}" 
+                        AllowDrop="True"
+                        Drop="ImageDrop"
+                    />
                 </Viewbox>
-                <Label Grid.Row="1" Margin="7"/>
             </Grid>
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="3" />
@@ -139,6 +160,7 @@
             Name="TrackGrid" 
             ItemsSource="{Binding Tracks}"
             SelectedItem="{Binding SelectedTrack}"
+            SelectionChanged="SelectedTrackChanged"
             IsReadOnly="True"
             AutoGenerateColumns="False" 
             Grid.Column="2"
