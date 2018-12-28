@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicWatcher", "MusicWatcher\MusicWatcher.csproj", "{E1EB2D20-F3DD-4E1D-B5CC-0866015E2463}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicMetadataLibrary", "MusicMetadataLibrary\MusicMetadataLibrary.csproj", "{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1EB2D20-F3DD-4E1D-B5CC-0866015E2463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1EB2D20-F3DD-4E1D-B5CC-0866015E2463}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1EB2D20-F3DD-4E1D-B5CC-0866015E2463}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1EB2D20-F3DD-4E1D-B5CC-0866015E2463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0FAA639-B3AF-408D-BC8E-B6C1A40DE0D5}
+	EndGlobalSection
+EndGlobal
