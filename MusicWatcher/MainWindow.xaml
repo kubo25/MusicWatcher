@@ -120,7 +120,7 @@
             />
             <Grid Grid.Row="8">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*" MinHeight="40"/>
                     <RowDefinition Height="4*"/>
                 </Grid.RowDefinitions>
                 <Label 
@@ -132,9 +132,9 @@
                     <Label.Content>
                         <TextBlock>
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0}x{1} - {2}">
-                                    <Binding Path="SelectedTrack.BitmapAlbumArt.Width"/>
-                                    <Binding Path="SelectedTrack.BitmapAlbumArt.Height"/>
+                                <MultiBinding StringFormat="{}{0:N0}x{1:N0} - {2}">
+                                    <Binding Path="SelectedTrackAlbumArt.Width"/>
+                                    <Binding Path="SelectedTrackAlbumArt.Height"/>
                                     <Binding Path="SelectedTrack.AlbumArtSize"/>
                                 </MultiBinding>
                             </TextBlock.Text>
@@ -148,7 +148,7 @@
                     Margin="7"
                 >
                     <Image 
-                        Source="{Binding SelectedTrack.BitmapAlbumArt}" 
+                        Source="{Binding SelectedTrackAlbumArt}" 
                         AllowDrop="True"
                         Drop="ImageDrop"
                     />

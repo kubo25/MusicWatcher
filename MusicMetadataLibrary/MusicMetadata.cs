@@ -143,15 +143,22 @@ namespace MusicMetadataLibrary {
         public System.Windows.Media.Color AlbumArtDominantColor { get; set; }
         public string AlbumArtSize {
             get {
-                double size = AlbumArt.Length;
-                if (AlbumArt.Length >= 1024 * 1024) {
-                    size /= 1024 * 1024;
-                    return size.ToString("0.00") + "MB";
-                } else if (AlbumArt.Length >= 1024) {
-                    size /= 1024;
-                    return size.ToString("0.00") + "kB";
-                } else {
-                    return size.ToString() + "B";
+                if (AlbumArt != null) {
+                    double size = AlbumArt.Length;
+                    if (AlbumArt.Length >= 1024 * 1024) {
+                        size /= 1024 * 1024;
+                        return size.ToString("0.00") + "MB";
+                    }
+                    else if (AlbumArt.Length >= 1024) {
+                        size /= 1024;
+                        return size.ToString("0.00") + "kB";
+                    }
+                    else {
+                        return size.ToString() + "B";
+                    }
+                }
+                else {
+                    return "No album art.";
                 }
             }
         }
@@ -159,6 +166,10 @@ namespace MusicMetadataLibrary {
         private TagLib.File file;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public MusicMetadata() {
+
+        }
 
         public MusicMetadata(string path) {
             this.path = path;
@@ -224,7 +235,7 @@ namespace MusicMetadataLibrary {
             int minDiversion = 15; // drop pixels that do not differ by at least minDiversion between color values (white, gray or black)
             int dropped = 0; // keep track of dropped pixels
             long[] totals = new long[] { 0, 0, 0 };
-            int bppModifier = bm.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb ? 3 : 4; // cutting corners, will fail on anything else but 32 and 24 bit images
+            int bppModifier = bm.PixelFormat == PixelFormat.Format24bppRgb ? 3 : 4; // cutting corners, will fail on anything else but 32 and 24 bit images
 
             BitmapData srcData = bm.LockBits(new Rectangle(0, 0, bm.Width, bm.Height), ImageLockMode.ReadOnly, bm.PixelFormat);
             int stride = srcData.Stride;

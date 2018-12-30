@@ -34,9 +34,7 @@ namespace MusicWatcher {
         }
 
         private void OnClose(object sender, CancelEventArgs e) {
-            foreach (MusicMetadata metadata in Model.Tracks) {
-                metadata.Dispose();
-            }
+            Model.Dispose();
         }
 
         private void ColorizeWindow() {
@@ -53,17 +51,17 @@ namespace MusicWatcher {
         }
 
         private void ImageDrop(object sender, DragEventArgs e) {
-            Model.SelectedTrack.PropertyChanged += ImageChanged;
+            Model.PropertyChanged += ImageChanged;
 
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-                Model.SelectedTrack.CreateNewAlbumArt((e.Data.GetData(DataFormats.FileDrop) as string[])[0], false);
+                Model.CreateNewAlbumArt((e.Data.GetData(DataFormats.FileDrop) as string[])[0], false);
             } else if (e.Data.GetDataPresent(DataFormats.Text)) {
-                Model.SelectedTrack.CreateNewAlbumArt((e.Data.GetData(DataFormats.Text) as string), true);
+                Model.CreateNewAlbumArt((e.Data.GetData(DataFormats.Text) as string), true);
             }
         }
 
         private void ImageChanged(object sender, PropertyChangedEventArgs e) {
-            if (e.PropertyName == "BitmapAlbumArt") {
+            if (e.PropertyName == "SelectedTrackAlbumArt") {
                 ColorizeWindow();
                 Model.SelectedTrack.PropertyChanged -= ImageChanged;
             }
