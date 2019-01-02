@@ -31,6 +31,8 @@ namespace MusicWatcher {
 
             Model = new ViewModel(path);
             DataContext = Model;
+
+            Model.PropertyChanged += ImageChanged;
         }
 
         private async void OnLoad(object sender, RoutedEventArgs e) {
@@ -39,11 +41,10 @@ namespace MusicWatcher {
             await Task.Run(() => {
                 foreach (double progress in Model.Init()) {
                     controller.SetProgress(progress);
-                    controller.SetMessage(string.Format("Loading: {0:N0}", progress * 100));
+                    controller.SetMessage(string.Format("Loading: {0:N0}%", progress * 100));
                 }
             });
 
-            ColorizeWindow();
             await controller.CloseAsync();
         }
 
@@ -56,17 +57,30 @@ namespace MusicWatcher {
             Application.Current.MainWindow.Activate();
         }
 
-        private void SaveCommand(object sender, ExecutedRoutedEventArgs e) {
-            Model.SelectedTrack.Save();
+        private async void SaveCommand(object sender, ExecutedRoutedEventArgs e) {
+            ProgressDialogController controller = await this.ShowProgressAsync("Saving changes", "Loading track: ");
+
+            await Task.Run(() => {
+                foreach (double progress in Model.Save()) {
+                    controller.SetProgress(progress);
+                    controller.SetMessage(string.Format("Saving: {0:N0}%", progress * 100));
+                }
+            });
+
+            await controller.CloseAsync();
         }
 
         private void SelectedTrackChanged(object sender, SelectionChangedEventArgs e) {
-            ColorizeWindow();
+            if (TrackGrid.SelectedItems.Count > 1) {
+                List<MusicMetadata> selectedTracks = TrackGrid.SelectedItems.Cast<MusicMetadata>().ToList();
+                Model.SelectMultipleTracks(selectedTracks);
+            }
+            else {
+                Model.DeselectMultipleTracks();
+            }
         }
 
         private void ImageDrop(object sender, DragEventArgs e) {
-            Model.PropertyChanged += ImageChanged;
-
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 Model.CreateNewAlbumArt((e.Data.GetData(DataFormats.FileDrop) as string[])[0], false);
             } else if (e.Data.GetDataPresent(DataFormats.Text)) {
@@ -76,7 +90,7 @@ namespace MusicWatcher {
 
         private void ImageChanged(object sender, PropertyChangedEventArgs e) {
             if (e.PropertyName == "SelectedTrackAlbumArt") {
-                ColorizeWindow();
+                Dispatcher.Invoke(() => ColorizeWindow());
             }
         }
     }

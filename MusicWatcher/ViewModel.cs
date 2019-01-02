@@ -16,6 +16,9 @@ namespace MusicWatcher {
         private readonly BitmapImage noAlbumArt = new BitmapImage(new Uri("pack://application:,,,/Images/NoAlbumArt.jpg"));
         private readonly string loadedPath;
 
+        private bool multipleTracksSelected = false;
+        private List<MusicMetadata> selectedTracks;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public BitmapImage SelectedTrackAlbumArt {
@@ -70,6 +73,69 @@ namespace MusicWatcher {
         public void CreateNewAlbumArt(string file, bool isBase64) {
             SelectedTrack.CreateNewAlbumArt(file, isBase64);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedTrackAlbumArt"));
+        }
+
+        public void SelectMultipleTracks(List<MusicMetadata> selectedTracks) {
+            this.selectedTracks = selectedTracks;
+            SelectedTrack = new MusicMetadata(selectedTracks[0]);
+
+            foreach(MusicMetadata track in selectedTracks) {
+                SelectedTrack.Title = "";
+                SelectedTrack.Track = 0;
+                SelectedTrack.Artist = SelectedTrack.Artist == track.Artist ? SelectedTrack.Artist : "";
+                SelectedTrack.Album = SelectedTrack.Album == track.Album ? SelectedTrack.Album : "";
+                SelectedTrack.Year = SelectedTrack.Year == track.Year ? SelectedTrack.Year : 0;
+                SelectedTrack.Genre = SelectedTrack.Genre == track.Genre ? SelectedTrack.Genre : "";
+                SelectedTrack.Comment = SelectedTrack.Comment == track.Comment ? SelectedTrack.Comment : "";
+                SelectedTrack.AlbumArtist = SelectedTrack.AlbumArtist == track.AlbumArtist ? SelectedTrack.AlbumArtist : "";
+                SelectedTrack.Composer = SelectedTrack.Composer == track.Composer ? SelectedTrack.Composer : "";
+                SelectedTrack.Discnumber = SelectedTrack.Discnumber == track.Discnumber ? SelectedTrack.Discnumber : 0;
+
+                if (SelectedTrack.AlbumArt != null && !SelectedTrack.AlbumArt.SequenceEqual(track.AlbumArt)) {
+                    SelectedTrack.AlbumArt = null;
+                    SelectedTrack.BitmapAlbumArt = null;
+                }
+            }
+
+            multipleTracksSelected = true;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedTrackAlbumArt"));
+        }
+
+        public void DeselectMultipleTracks() {
+            selectedTracks = null;
+            multipleTracksSelected = false;
+        }
+
+        public IEnumerable<double> Save() {
+            if (multipleTracksSelected) {
+                double progress = 0f;
+                foreach (MusicMetadata track in selectedTracks) {
+                    track.Title = SelectedTrack.Title != "" ? SelectedTrack.Title : track.Title;
+                    track.Track = SelectedTrack.Track != 0 ? SelectedTrack.Track : track.Track;
+                    track.Artist = SelectedTrack.Artist != "" ? SelectedTrack.Artist : track.Artist;
+                    track.Album = SelectedTrack.Album != "" ? SelectedTrack.Album : track.Album;
+                    track.Year = SelectedTrack.Year != 0 ? SelectedTrack.Year : track.Year;
+                    track.Genre = SelectedTrack.Genre != "" ? SelectedTrack.Genre : track.Genre;
+                    track.Comment = SelectedTrack.Comment != "" ? SelectedTrack.Comment : track.Comment;
+                    track.AlbumArtist = SelectedTrack.AlbumArtist != "" ? SelectedTrack.AlbumArtist : track.AlbumArtist;
+                    track.Composer = SelectedTrack.Composer != "" ? SelectedTrack.Composer : track.Composer;
+                    track.Discnumber = SelectedTrack.Discnumber != 0 ? SelectedTrack.Discnumber : track.Discnumber;
+                    
+                    if(SelectedTrack.AlbumArt != null) {
+                        track.AlbumArt = SelectedTrack.AlbumArt;
+                        track.BitmapAlbumArt = SelectedTrack.BitmapAlbumArt;
+                        track.AlbumArtDominantColor = SelectedTrack.AlbumArtDominantColor;
+                    }
+
+                    track.Save();
+                    progress += 1f / selectedTracks.Count;
+                    yield return progress;
+                }
+            }
+            else {
+                SelectedTrack.Save();
+                yield return 1;
+            }
         }
     }
 }

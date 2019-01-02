@@ -137,7 +137,6 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private BitmapImage _BitmapAlbumArt { get; set; }
         public BitmapImage BitmapAlbumArt { get; set; }
 
         public System.Windows.Media.Color AlbumArtDominantColor { get; set; }
@@ -167,8 +166,26 @@ namespace MusicMetadataLibrary {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MusicMetadata() {
+        public MusicMetadata() { }
 
+        public MusicMetadata(MusicMetadata original) {
+            path = original.path;
+            file = TagLib.File.Create(path);
+
+            FileName = original.FileName;
+            _Title = original.Title;
+            _Artist = original.Artist;
+            _Album = original.Album;
+            _Year = original.Year;
+            _Track = original.Track;
+            _Genre = original.Genre;
+            _Comment = original.Comment;
+            _AlbumArtist = original.AlbumArtist;
+            _Composer = original.Composer;
+            _Discnumber = original.Discnumber;
+            _AlbumArt = original.AlbumArt;
+            BitmapAlbumArt = original.BitmapAlbumArt;
+            AlbumArtDominantColor = original.AlbumArtDominantColor;
         }
 
         public MusicMetadata(string path) {
