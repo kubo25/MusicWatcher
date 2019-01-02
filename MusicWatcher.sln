@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicWatcher", "MusicWatche
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicMetadataLibrary", "MusicMetadataLibrary\MusicMetadataLibrary.csproj", "{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicWatcherService", "MusicWatcherService\MusicWatcherService.csproj", "{3504F562-0617-46EC-95A6-786FC6C65CAE}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MusicWatcherSetup", "MusicWatcherSetup\MusicWatcherSetup.vdproj", "{470DC044-3460-4AD2-BEE4-B9E6BD5C9DDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,12 @@ Global
 		{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3504F562-0617-46EC-95A6-786FC6C65CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3504F562-0617-46EC-95A6-786FC6C65CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3504F562-0617-46EC-95A6-786FC6C65CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3504F562-0617-46EC-95A6-786FC6C65CAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{470DC044-3460-4AD2-BEE4-B9E6BD5C9DDC}.Debug|Any CPU.ActiveCfg = Debug
+		{470DC044-3460-4AD2-BEE4-B9E6BD5C9DDC}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

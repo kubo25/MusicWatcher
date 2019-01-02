@@ -17,7 +17,7 @@ namespace MusicMetadataLibrary {
 
         public string FileName { get; }
 
-        private string _Title { get; set; }
+        private string _Title;
         public string Title {
             get { return _Title; }
             set {
@@ -28,7 +28,7 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private string _Artist { get; set; }
+        private string _Artist;
         public string Artist {
             get { return _Artist; }
             set {
@@ -39,7 +39,7 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private string _Album { get; set; }
+        private string _Album;
         public string Album {
             get { return _Album; }
             set {
@@ -50,7 +50,7 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private uint _Year { get; set; }
+        private uint _Year;
         public uint Year {
             get { return _Year; }
             set {
@@ -61,7 +61,7 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private uint _Track { get; set; }
+        private uint _Track;
         public uint Track {
             get { return _Track; }
             set {
@@ -72,7 +72,7 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private string _Genre { get; set; }
+        private string _Genre;
         public string Genre {
             get { return _Genre; }
             set {
@@ -83,7 +83,7 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private string _Comment { get; set; }
+        private string _Comment;
         public string Comment {
             get { return _Comment; }
             set {
@@ -94,7 +94,7 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private string _AlbumArtist { get; set; }
+        private string _AlbumArtist;
         public string AlbumArtist {
             get { return _AlbumArtist; }
             set {
@@ -105,7 +105,7 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private string _Composer { get; set; }
+        private string _Composer;
         public string Composer {
             get { return _Composer; }
             set {
@@ -116,7 +116,7 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private uint _Discnumber { get; set; }
+        private uint _Discnumber;
         public uint Discnumber {
             get { return _Discnumber; }
             set {
@@ -127,7 +127,7 @@ namespace MusicMetadataLibrary {
             }
         }
 
-        private byte[] _AlbumArt { get; set; }
+        private byte[] _AlbumArt;
         public byte[] AlbumArt {
             get { return _AlbumArt; }
             set {

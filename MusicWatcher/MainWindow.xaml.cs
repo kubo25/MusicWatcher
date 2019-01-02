@@ -18,6 +18,7 @@ using MusicMetadataLibrary;
 using System.ComponentModel;
 using MahApps.Metro.Controls.Dialogs;
 using System.Threading;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace MusicWatcher {
     /// <summary>
@@ -56,7 +57,7 @@ namespace MusicWatcher {
             Refresh();
         }
 
-        public void RefreshClick(object sender, RoutedEventArgs e) {
+        private void RefreshClick(object sender, RoutedEventArgs e) {
             Refresh();
         }
 
@@ -82,11 +83,11 @@ namespace MusicWatcher {
             await controller.CloseAsync();
         }
 
-        public void SaveCommand(object sender, ExecutedRoutedEventArgs e) {
+        private void SaveCommand(object sender, ExecutedRoutedEventArgs e) {
             Save();
         }
 
-        public void SaveClick(object sender, RoutedEventArgs e) {
+        private void SaveClick(object sender, RoutedEventArgs e) {
             Save();
         }
 
@@ -111,6 +112,32 @@ namespace MusicWatcher {
         private void ImageChanged(object sender, PropertyChangedEventArgs e) {
             if (e.PropertyName == "SelectedTrackAlbumArt") {
                 Dispatcher.Invoke(() => ColorizeWindow());
+            }
+        }
+
+        private void ServiceToggleClick(object sender, RoutedEventArgs e) {
+            Model.ServiceSettings.ToggleService();
+        }
+
+        private void BrowseClick(object sender, RoutedEventArgs e) {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog {
+                Title = "My Title",
+                IsFolderPicker = true,
+                InitialDirectory = Model.ServiceSettings.WatchFolder,
+
+                AddToMostRecentlyUsedList = false,
+                AllowNonFileSystemItems = false,
+                DefaultDirectory = Model.ServiceSettings.WatchFolder,
+                EnsureFileExists = true,
+                EnsurePathExists = true,
+                EnsureReadOnly = false,
+                EnsureValidNames = true,
+                Multiselect = false,
+                ShowPlacesList = true
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok) {
+                Model.ServiceSettings.WatchFolder = dialog.FileName;
             }
         }
     }

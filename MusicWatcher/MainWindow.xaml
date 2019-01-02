@@ -9,9 +9,13 @@
         Dialog:DialogParticipation.Register="{Binding}"
         Loaded="OnLoad"
         mc:Ignorable="d"
-        Height="598.729" Width="800"
+        Height="600" 
+        Width="800"
+        MinWidth="600"
         BorderBrush="{DynamicResource AccentColorBrush}"
-        BorderThickness="1">
+        BorderThickness="1"
+        RightWindowCommandsOverlayBehavior="Never"
+>
     <Controls:MetroWindow.Title>
         <MultiBinding StringFormat="{}{0} - {1} - {2}">
             <Binding Path="SelectedTrack.AlbumArtist"/>
@@ -19,9 +23,76 @@
             <Binding Path="SelectedTrack.Title"/>
         </MultiBinding>
     </Controls:MetroWindow.Title>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout
+                Name="SettingsFlyout"
+                Header="Settings"
+                Position="Right"
+                Theme="Dark"
+                Width="500"
+            >
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Controls:ToggleSwitch 
+                        Header="Watcher service status:"
+                        IsChecked="{Binding ServiceSettings.IsServiceRunning, Mode=OneWay}"
+                        Click="ServiceToggleClick"
+                    />
+                    <Controls:MetroHeader 
+                        Header="Watcher service folder path:" 
+                        Grid.Row="1"
+                        Margin="0, 10, 0, 0"
+                    >
+                        <Controls:MetroHeader.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="Segoe UI Semibold"
+                                    FontSize="16"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,0,5"
+                                    Text="{Binding}" 
+                                />
+                            </DataTemplate>
+                        </Controls:MetroHeader.HeaderTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox 
+                                Text="{Binding ServiceSettings.WatchFolder}" 
+                                Grid.Column="0" 
+                                Margin="0, 0, 10, 0"
+                            />
+                            <Button 
+                                Content="Browse" 
+                                Grid.Column="1"
+                                Click="BrowseClick"
+                            />
+                        </Grid>
+                    </Controls:MetroHeader>
+                    <Button 
+                        Content="Apply"
+                        Grid.Row="2"
+                        HorizontalAlignment="Right"
+                        Margin="0, 20, 0, 0"
+                    />
+                </Grid>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Content="settings"/>
+            <ToggleButton 
+                Content="Settings" 
+                IsChecked="{Binding ElementName=SettingsFlyout, Path=IsOpen}"
+                Cursor="Hand"
+            />
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
     <Controls:MetroWindow.LeftWindowCommands>
@@ -183,17 +254,61 @@
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="File Name" Binding="{Binding FileName}" ElementStyle="{StaticResource ColumnElementStyle}"/>
-                <DataGridTextColumn Header="Title" Binding="{Binding Title}" ElementStyle="{StaticResource ColumnElementStyle}"/>
-                <DataGridTextColumn Header="Artist" Binding="{Binding Artist}" ElementStyle="{StaticResource ColumnElementStyle}"/>
-                <DataGridTextColumn Header="Album" Binding="{Binding Album}" ElementStyle="{StaticResource ColumnElementStyle}"/>
-                <DataGridTextColumn Header="Year" Binding="{Binding Year}" ElementStyle="{StaticResource ColumnElementStyle}"/>
-                <DataGridTextColumn Header="Track" Binding="{Binding Track}" ElementStyle="{StaticResource ColumnElementStyle}"/>
-                <DataGridTextColumn Header="Genre" Binding="{Binding Genre}" ElementStyle="{StaticResource ColumnElementStyle}"/>
-                <DataGridTextColumn Header="Comment" Binding="{Binding Comment}" ElementStyle="{StaticResource ColumnElementStyle}"/>
-                <DataGridTextColumn Header="Album Artist" Binding="{Binding AlbumArtist}" ElementStyle="{StaticResource ColumnElementStyle}"/>
-                <DataGridTextColumn Header="Composer" Binding="{Binding Composer}" ElementStyle="{StaticResource ColumnElementStyle}"/>
-                <DataGridTextColumn Header="Discnumber" Binding="{Binding Discnumber}" ElementStyle="{StaticResource ColumnElementStyle}"/>
+                <DataGridTextColumn 
+                    Header="File Name" 
+                    Binding="{Binding FileName}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
+                <DataGridTextColumn 
+                    Header="Title" 
+                    Binding="{Binding Title}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
+                <DataGridTextColumn 
+                    Header="Artist" 
+                    Binding="{Binding Artist}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
+                <DataGridTextColumn 
+                    Header="Album" 
+                    Binding="{Binding Album}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
+                <DataGridTextColumn 
+                    Header="Year" 
+                    Binding="{Binding Year}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
+                <DataGridTextColumn 
+                    Header="Track" 
+                    Binding="{Binding Track}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
+                <DataGridTextColumn 
+                    Header="Genre" 
+                    Binding="{Binding Genre}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
+                <DataGridTextColumn 
+                    Header="Comment" 
+                    Binding="{Binding Comment}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
+                <DataGridTextColumn 
+                    Header="Album Artist" 
+                    Binding="{Binding AlbumArtist}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
+                <DataGridTextColumn 
+                    Header="Composer" 
+                    Binding="{Binding Composer}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
+                <DataGridTextColumn 
+                    Header="Discnumber" 
+                    Binding="{Binding Discnumber}" 
+                    ElementStyle="{StaticResource ColumnElementStyle}"
+                />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

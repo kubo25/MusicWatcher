@@ -21,6 +21,8 @@ namespace MusicWatcher {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public ServiceSettings ServiceSettings { get; set; }
+
         public BitmapImage SelectedTrackAlbumArt {
             get {
                 if (SelectedTrack != null && SelectedTrack.BitmapAlbumArt != null) {
@@ -32,7 +34,7 @@ namespace MusicWatcher {
             }
         }
 
-        private MusicMetadata _SelectedTrack { get; set; }
+        private MusicMetadata _SelectedTrack;
         public MusicMetadata SelectedTrack {
             get { return _SelectedTrack; }
             set {
@@ -45,6 +47,7 @@ namespace MusicWatcher {
 
         public ViewModel(string path) {
             loadedPath = path;
+            ServiceSettings = new ServiceSettings();
         }
 
         public IEnumerable<double> Init() {
