@@ -56,8 +56,8 @@ namespace MusicWatcher {
             foreach (string file in files) {
                 Tracks.Add(new MusicMetadata(file));
                 progress += 1f / files.Length;
+                progress = progress > 1 ? 1 : progress;
                 yield return progress;
-
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Tracks"));
@@ -129,6 +129,7 @@ namespace MusicWatcher {
 
                     track.Save();
                     progress += 1f / selectedTracks.Count;
+                    progress = progress > 1 ? 1 : progress;
                     yield return progress;
                 }
             }

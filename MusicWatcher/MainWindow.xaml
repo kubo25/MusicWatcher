@@ -21,14 +21,22 @@
     </Controls:MetroWindow.Title>
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Content="settings" />
+            <Button Content="settings"/>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
+    <Controls:MetroWindow.LeftWindowCommands>
+        <Controls:WindowCommands>
+            <Button Content="Save" Click="SaveClick"/>
+            <Button Content="Refresh" Click="RefreshClick"/>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.LeftWindowCommands>
     <Window.CommandBindings>
         <CommandBinding Command="Save" Executed="SaveCommand"/>
+        <CommandBinding Command="Refresh" Executed="RefreshCommand"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Gesture="Ctrl+S" Command="Save"/>
+        <KeyBinding Gesture="F5" Command="Refresh"/>
     </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -158,11 +166,12 @@
                 </Viewbox>
             </Grid>
         </Grid>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="3" />
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="3"/>
         <DataGrid 
             Name="TrackGrid" 
             ItemsSource="{Binding Tracks}"
             SelectedItem="{Binding SelectedTrack}"
+            IsSynchronizedWithCurrentItem="True"
             SelectionChanged="SelectedTrackChanged"
             IsReadOnly="True"
             AutoGenerateColumns="False" 

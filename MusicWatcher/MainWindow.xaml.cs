@@ -34,9 +34,8 @@ namespace MusicWatcher {
 
             Model.PropertyChanged += ImageChanged;
         }
-
-        private async void OnLoad(object sender, RoutedEventArgs e) {
-            ProgressDialogController controller = await this.ShowProgressAsync("Loading tracks", "Loading track: ");
+        private async void Refresh() {
+            ProgressDialogController controller = await this.ShowProgressAsync("Loading tracks", "");
 
             await Task.Run(() => {
                 foreach (double progress in Model.Init()) {
@@ -48,6 +47,19 @@ namespace MusicWatcher {
             await controller.CloseAsync();
         }
 
+
+        private void OnLoad(object sender, RoutedEventArgs e) {
+            Refresh();
+        }
+
+        public void RefreshCommand(object sender, ExecutedRoutedEventArgs e) {
+            Refresh();
+        }
+
+        public void RefreshClick(object sender, RoutedEventArgs e) {
+            Refresh();
+        }
+
         private void OnClose(object sender, CancelEventArgs e) {
             Model.Dispose();
         }
@@ -57,8 +69,8 @@ namespace MusicWatcher {
             Application.Current.MainWindow.Activate();
         }
 
-        private async void SaveCommand(object sender, ExecutedRoutedEventArgs e) {
-            ProgressDialogController controller = await this.ShowProgressAsync("Saving changes", "Loading track: ");
+        private async void Save() {
+            ProgressDialogController controller = await this.ShowProgressAsync("Saving changes", "");
 
             await Task.Run(() => {
                 foreach (double progress in Model.Save()) {
@@ -68,6 +80,14 @@ namespace MusicWatcher {
             });
 
             await controller.CloseAsync();
+        }
+
+        public void SaveCommand(object sender, ExecutedRoutedEventArgs e) {
+            Save();
+        }
+
+        public void SaveClick(object sender, RoutedEventArgs e) {
+            Save();
         }
 
         private void SelectedTrackChanged(object sender, SelectionChangedEventArgs e) {
