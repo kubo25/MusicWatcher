@@ -1,25 +1,26 @@
 ﻿using MusicMetadataLibrary;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace MusicWatcher {
     public class ViewModel : INotifyPropertyChanged {
         private readonly NameValueCollection settings = ConfigurationManager.AppSettings;
         private readonly BitmapImage noAlbumArt = new BitmapImage(new Uri("pack://application:,,,/Images/NoAlbumArt.jpg"));
+        private readonly string loadedPath;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public BitmapImage SelectedTrackAlbumArt {
             get {
-                if (SelectedTrack.BitmapAlbumArt != null) {
+                if (SelectedTrack != null && SelectedTrack.BitmapAlbumArt != null) {
                     return SelectedTrack.BitmapAlbumArt;
                 }
                 else {
@@ -37,14 +38,26 @@ namespace MusicWatcher {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedTrackAlbumArt"));
             }
         }
-        public List<MusicMetadata> Tracks { get; set; }
+        public ObservableCollection<MusicMetadata> Tracks { get; set; }
 
         public ViewModel(string path) {
-            Tracks = new List<MusicMetadata>();
-            string[] files = Directory.GetFiles(path);
+            loadedPath = path;
+        }
+
+        public IEnumerable<double> Init() {
+            double progress = 0f;
+
+            Tracks = new ObservableCollection<MusicMetadata>();
+            string[] files = Directory.GetFiles(loadedPath);
+
             foreach (string file in files) {
                 Tracks.Add(new MusicMetadata(file));
+                progress += 1f / files.Length;
+                yield return progress;
+
             }
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Tracks"));
             SelectedTrack = Tracks[0];
         }
 

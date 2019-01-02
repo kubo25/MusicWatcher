@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using System.IO;
 using MusicMetadataLibrary;
 using System.ComponentModel;
+using MahApps.Metro.Controls.Dialogs;
+using System.Threading;
 
 namespace MusicWatcher {
     /// <summary>
@@ -29,8 +31,20 @@ namespace MusicWatcher {
 
             Model = new ViewModel(path);
             DataContext = Model;
+        }
+
+        private async void OnLoad(object sender, RoutedEventArgs e) {
+            ProgressDialogController controller = await this.ShowProgressAsync("Loading tracks", "Loading track: ");
+
+            await Task.Run(() => {
+                foreach (double progress in Model.Init()) {
+                    controller.SetProgress(progress);
+                    controller.SetMessage(string.Format("Loading: {0:N0}", progress * 100));
+                }
+            });
 
             ColorizeWindow();
+            await controller.CloseAsync();
         }
 
         private void OnClose(object sender, CancelEventArgs e) {
@@ -63,7 +77,6 @@ namespace MusicWatcher {
         private void ImageChanged(object sender, PropertyChangedEventArgs e) {
             if (e.PropertyName == "SelectedTrackAlbumArt") {
                 ColorizeWindow();
-                Model.SelectedTrack.PropertyChanged -= ImageChanged;
             }
         }
     }
