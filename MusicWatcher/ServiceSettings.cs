@@ -1,15 +1,20 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MusicWatcher {
     public class ServiceSettings : INotifyPropertyChanged {
         private const string serviceName = "MusicWatcherService";
         private readonly ServiceController service = new ServiceController(serviceName);
+        private readonly KeyValueConfigurationCollection serviceSettings;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -33,8 +38,14 @@ namespace MusicWatcher {
 
         public ServiceSettings() {
             IsServiceRunning = service.Status == ServiceControllerStatus.Running;
-            //IsServiceRunning = true;
-            WatchFolder = @"D:\Anime";
+
+            RegistryKey hklm = Registry.LocalMachine;
+            hklm = hklm.OpenSubKey(@"System\CurrentControlSet\Services\" + serviceName);
+            string path = hklm.GetValue("ImagePath").ToString();
+            path = Regex.Match(path, "\"(.*)\"").Groups[1].ToString();
+
+            serviceSettings = ConfigurationManager.OpenExeConfiguration(path).AppSettings.Settings;
+            WatchFolder = serviceSettings["WatchFolder"].Value;
         }
 
         private void CheckServiceStatus (bool shouldStop) {

@@ -15,6 +15,7 @@ namespace MusicWatcher {
         private readonly NameValueCollection settings = ConfigurationManager.AppSettings;
         private readonly BitmapImage noAlbumArt = new BitmapImage(new Uri("pack://application:,,,/Images/NoAlbumArt.jpg"));
         private readonly string loadedPath;
+        private readonly List<string> fileExtensions;
 
         private bool multipleTracksSelected = false;
         private List<MusicMetadata> selectedTracks;
@@ -48,13 +49,15 @@ namespace MusicWatcher {
         public ViewModel(string path) {
             loadedPath = path;
             ServiceSettings = new ServiceSettings();
+
+            fileExtensions = settings["WatchFileExtensions"].Split(',').ToList();
         }
 
         public IEnumerable<double> Init() {
             double progress = 0f;
 
             Tracks = new ObservableCollection<MusicMetadata>();
-            string[] files = Directory.GetFiles(loadedPath);
+            string[] files = Directory.GetFiles(loadedPath).Where(file => fileExtensions.Contains(Path.GetExtension(file))).ToArray();
 
             foreach (string file in files) {
                 Tracks.Add(new MusicMetadata(file));

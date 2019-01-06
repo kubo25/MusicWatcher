@@ -16,13 +16,13 @@
         "Entry"
         {
         "MsmKey" = "8:_05C1D1325C801F24BB5BFB835B0BC2A4"
-        "OwnerKey" = "8:_93BFF7B40DD94C72A215485E49F9AC15"
+        "OwnerKey" = "8:_FC5094521E844924BD05AC0C4DCFCAC9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_05C1D1325C801F24BB5BFB835B0BC2A4"
-        "OwnerKey" = "8:_FC5094521E844924BD05AC0C4DCFCAC9"
+        "OwnerKey" = "8:_C87688366C5E4C26BD5D3E08BFC33886"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -46,19 +46,19 @@
         "Entry"
         {
         "MsmKey" = "8:_2C738E118239754CB89441D51AD02182"
-        "OwnerKey" = "8:_93BFF7B40DD94C72A215485E49F9AC15"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5ADA5768C8AAB9E149C50B32004F6A6A"
-        "OwnerKey" = "8:_93BFF7B40DD94C72A215485E49F9AC15"
+        "OwnerKey" = "8:_C87688366C5E4C26BD5D3E08BFC33886"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_5ADA5768C8AAB9E149C50B32004F6A6A"
         "OwnerKey" = "8:_FC5094521E844924BD05AC0C4DCFCAC9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5ADA5768C8AAB9E149C50B32004F6A6A"
+        "OwnerKey" = "8:_C87688366C5E4C26BD5D3E08BFC33886"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,13 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_7CC749F1209F2DC55358BCC116DCC3CB"
-        "OwnerKey" = "8:_93BFF7B40DD94C72A215485E49F9AC15"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_93BFF7B40DD94C72A215485E49F9AC15"
-        "OwnerKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C87688366C5E4C26BD5D3E08BFC33886"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -135,6 +129,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C87688366C5E4C26BD5D3E08BFC33886"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_FC2B04DCF61809618B93BF3530BAC38B"
         "OwnerKey" = "8:_FC5094521E844924BD05AC0C4DCFCAC9"
         "MsmSig" = "8:_UNDEFINED"
@@ -154,13 +154,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_93BFF7B40DD94C72A215485E49F9AC15"
+        "OwnerKey" = "8:_FC5094521E844924BD05AC0C4DCFCAC9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FC5094521E844924BD05AC0C4DCFCAC9"
+        "OwnerKey" = "8:_C87688366C5E4C26BD5D3E08BFC33886"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_7CC749F1209F2DC55358BCC116DCC3CB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -220,12 +226,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7CC749F1209F2DC55358BCC116DCC3CB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_05C1D1325C801F24BB5BFB835B0BC2A4"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -254,6 +254,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -278,6 +286,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
     }
@@ -767,7 +783,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MusicWatcher"
         "ProductCode" = "8:{AD2E832D-8B5C-4A7A-B404-4351B46637AB}"
-        "PackageCode" = "8:{235C0BA1-BC02-4028-9D76-700B03633BE3}"
+        "PackageCode" = "8:{F1DFC350-7D38-487C-8ABF-26786D1E3FE9}"
         "UpgradeCode" = "8:{4B46344C-1904-4DC8-A727-30D787A76289}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1286,34 +1302,6 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_93BFF7B40DD94C72A215485E49F9AC15"
-            {
-            "SourcePath" = "8:..\\MusicMetadataLibrary\\obj\\Debug\\MusicMetadataLibrary.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_99C83BD182BB4404B14E52B0E1CEF962"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C2E0C0B8D4D14D0194A402C0D2C1D75C"
             {
             "SourcePath" = "8:..\\MusicWatcherService\\obj\\Debug\\MusicWatcherService.exe"
@@ -1337,6 +1325,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{3504F562-0617-46EC-95A6-786FC6C65CAE}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C87688366C5E4C26BD5D3E08BFC33886"
+            {
+            "SourcePath" = "8:..\\MusicMetadataLibrary\\obj\\Debug\\MusicMetadataLibrary.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_99C83BD182BB4404B14E52B0E1CEF962"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{50731D9D-9DC3-4C9A-ABB3-346FDCD3E522}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
