@@ -140,5 +140,9 @@ namespace MusicWatcher {
                 Model.ServiceSettings.WatchFolder = dialog.FileName;
             }
         }
+
+        private void ApplyClick(object sender, RoutedEventArgs e) {
+            Model.ServiceSettings.ApplySettings();
+        }
     }
 }

@@ -71,13 +71,14 @@
                             />
                             <Button 
                                 Content="Browse" 
-                                Grid.Column="1"
                                 Click="BrowseClick"
+                                Grid.Column="1"
                             />
                         </Grid>
                     </Controls:MetroHeader>
                     <Button 
                         Content="Apply"
+                        Click="ApplyClick"
                         Grid.Row="2"
                         HorizontalAlignment="Right"
                         Margin="0, 20, 0, 0"

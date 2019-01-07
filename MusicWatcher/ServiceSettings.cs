@@ -14,7 +14,7 @@ namespace MusicWatcher {
     public class ServiceSettings : INotifyPropertyChanged {
         private const string serviceName = "MusicWatcherService";
         private readonly ServiceController service = new ServiceController(serviceName);
-        private readonly KeyValueConfigurationCollection serviceSettings;
+        private readonly Configuration serviceConfiguration;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -44,8 +44,8 @@ namespace MusicWatcher {
             string path = hklm.GetValue("ImagePath").ToString();
             path = Regex.Match(path, "\"(.*)\"").Groups[1].ToString();
 
-            serviceSettings = ConfigurationManager.OpenExeConfiguration(path).AppSettings.Settings;
-            WatchFolder = serviceSettings["WatchFolder"].Value;
+            serviceConfiguration = ConfigurationManager.OpenExeConfiguration(path);
+            WatchFolder = serviceConfiguration.AppSettings.Settings["WatchFolder"].Value;
         }
 
         private void CheckServiceStatus (bool shouldStop) {
@@ -54,18 +54,36 @@ namespace MusicWatcher {
             IsServiceRunning = !shouldStop;
         }
 
+        public void ApplySettings() {
+            serviceConfiguration.AppSettings.Settings["WatchFolder"].Value = WatchFolder;
+            serviceConfiguration.Save();
+
+            RestartService();
+        }
+
+        private async Task StartService() {
+            service.Start();
+            await Task.Run(() => CheckServiceStatus(false));
+        }
+
+        private async Task StopService() {
+            service.Stop();
+            await Task.Run(() => CheckServiceStatus(true));
+        }
+
+        private async void RestartService() {
+            if (IsServiceRunning) {
+                await StopService();
+            }
+            await StartService();
+        }
+
         public async void ToggleService() {
             if (IsServiceRunning) {
-                service.Stop();
-                await Task.Run(() => {
-                    CheckServiceStatus(true);
-                });
+                await StopService();
             }
             else {
-                service.Start();
-                await Task.Run(() => {
-                    CheckServiceStatus(false);
-                });
+                await StartService();
             }
         }
     }
