@@ -17,6 +17,7 @@ namespace MusicWatcherService {
         private readonly NameValueCollection settings = ConfigurationManager.AppSettings;
 
         private EventLog log;
+        private Watcher watcher;
 
         public MusicWatcherService() {
             ServiceName = serviceName;
@@ -28,10 +29,14 @@ namespace MusicWatcherService {
             }
 
             log = new EventLog(logName, ".", logSource);
+
+            watcher = new Watcher(settings["WatchFolder"], settings["WatchFileExtensions"].Split(',').ToArray(),log);
+
             log.WriteEntry(string.Format("Started watching {0}", settings["WatchFolder"]));
         }
 
         protected override void OnStop() {
+            watcher.Dispose();
             log.WriteEntry("Watcher service stopped");
         }
     }

@@ -36,6 +36,7 @@ namespace MusicWatcherService {
         protected override void OnBeforeUninstall(IDictionary savedState) {
             ServiceController serviceController = new ServiceController(MusicWatcherService.serviceName);
             serviceController.Stop();
+            serviceController.WaitForStatus(ServiceControllerStatus.Stopped);
             serviceController.Dispose();
         }
     }
