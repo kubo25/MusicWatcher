@@ -54,6 +54,11 @@ namespace MusicWatcherService {
             if (files.Any(x => watchFileExtensions.Contains(Path.GetExtension(x)))) {
                 Log.WriteEntry(string.Format("New folder with music: {0}", path));
                 Log.WriteEntry(string.Format("Files({0}):{1}{2}", files.Length, Environment.NewLine, string.Join("," + Environment.NewLine, files)));
+
+                string appPath = AppDomain.CurrentDomain.BaseDirectory + "/MusicWatcher.exe";
+                string argument = "\"" + path + "\"";
+
+                ApplicationLoader.StartProcessAndBypassUAC(appPath + " " + argument, out ApplicationLoader.PROCESS_INFORMATION procInfo);
             }
         }
 
