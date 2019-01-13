@@ -308,6 +308,10 @@ namespace MusicMetadataLibrary {
         }
 
         public void Save() {
+            file.RemoveTags(TagTypes.AllTags); //To remove all unused tags like old pictures first delete all tags
+            file.Save();
+            Dispose();
+
             Tag tag = new TagLib.Id3v2.Tag {
                 Title = Title,
                 Performers = new string[] { Artist },
@@ -321,16 +325,15 @@ namespace MusicMetadataLibrary {
                 Disc = Discnumber
             };
 
-            ByteVector artVector = new ByteVector(AlbumArt);
-            IPicture[] picture = new IPicture[] { new Picture(artVector) };
-
-            file.RemoveTags(TagTypes.AllTags); //To remove all unused tags like old pictures first delete all tags
-            file.Save();
-            Dispose();
-
             file = TagLib.File.Create(path);
             tag.CopyTo(file.Tag, true);
-            file.Tag.Pictures = picture;
+
+            if (AlbumArt != null) {
+                ByteVector artVector = new ByteVector(AlbumArt);
+                IPicture[] picture = new IPicture[] { new Picture(artVector) };
+                file.Tag.Pictures = picture;
+            }
+
             file.Save();
         }
 
